@@ -35,13 +35,3 @@ write(model, traj, "mini_bee_data.json")
 plot(traj.time, traj.position', title="(t₀=0, tf=$tf) - $N points", legend=:topleft)
 plot(traj.time[1:end-1], traj.thrust', title="Thrust")
 plot(traj.time[1:end-1], traj.angular_controls', title="Angular controls")
-
-# using Test
-# @testset "MiniBee.jl" begin
-#     # run tests
-# end
-
-# port = look_for_port()
-# write_data(port) = (clientside = connect(port); write(clientside, 0); close(clientside))
-# write_data(port)
-# remap(x, from, to) = (x - from[1]) * (to[2] - to[1]) / (from[2] - from[1]) + to[1]
