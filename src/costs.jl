@@ -1,8 +1,21 @@
+"""
+Cost model typically used in an Objective function.
+"""
 abstract type CostModel end
 
+"""
+Cost that does not rely on any particular discretization.
+"""
 abstract type ContinuousCost <: CostModel end
+
+"""
+Punctual cost, that is only evaluated at designated points.
+"""
 abstract type PointCost <: CostModel end
 
+"""
+Linear Quadratic Regulator model.
+"""
 struct LQR <: ContinuousCost
     Q
     R
@@ -16,6 +29,9 @@ end
 
 TrajectoryOptimization.cost(cm::LQR) = LQRCost(cm.Q, cm.R, cm.nominal_state)
 
+"""
+LQR cost associated with waypoints, only at node points designed by integer indices in `times`.
+"""
 struct WaypointsLQR <: PointCost
     times
     costs
@@ -28,7 +44,10 @@ struct WaypointsLQR <: PointCost
     end
 end
 
-struct CombinedCost <: CostModel
+"""
+Cost structure holding a function that can be evaluated with the number of discretization points as argument to create a vector of costs.
+"""
+struct DiscretizeableCost <: CostModel
     discretization_f
 end
 
@@ -40,13 +59,16 @@ function combine(cc::ContinuousCost, pc::PointCost)
             !isnothing(i) ? pc.costs[i] : cost_1
         end
     end
-    CombinedCost(discretize_cost)
+    DiscretizeableCost(discretize_cost)
 end
 
+"""
+Structure holding a vector of point costs.
+"""
 struct TrajectoryCost
     costs
 end
 TrajectoryCost(N, cost_model::ContinuousCost) = TrajectoryCost(repeat([cost(cost_model)], N))
-TrajectoryCost(N, cost_model::CombinedCost) = TrajectoryCost(cost_model.discretization_f(N))
+TrajectoryCost(N, cost_model::DiscretizeableCost) = TrajectoryCost(cost_model.discretization_f(N))
 
 TrajectoryOptimization.Objective(t::TrajectoryCost) = Objective(t.costs)

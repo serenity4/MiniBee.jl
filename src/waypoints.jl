@@ -1,3 +1,6 @@
+"""
+Intermediary point along the trajectory.
+"""
 struct Waypoint
     location
     time

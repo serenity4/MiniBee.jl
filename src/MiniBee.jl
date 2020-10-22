@@ -8,9 +8,11 @@ include("spacecraft.jl")
 include("waypoints.jl")
 include("costs.jl")
 include("problem.jl")
-include("blender.jl")
 include("postprocessing.jl")
 
+"""
+Build a problem, solve it and return a `SpacecraftTrajectory` to be used in postprocessing.
+"""
 function main(model, opts, N, tf, dt, xf_pos, u0; waypoints=[])
     
     prob = build_problem(model, N, tf, dt, xf_pos, u0; waypoints)

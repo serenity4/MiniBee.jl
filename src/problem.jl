@@ -1,3 +1,6 @@
+"""
+Build a problem to be ingested by a solver.
+"""
 function build_problem(model::Spacecraft, N, tf, dt, xf_pos, u0; waypoints=[])
     n, m = size(model)
     x0_pos = SA[0, 0, 0.]

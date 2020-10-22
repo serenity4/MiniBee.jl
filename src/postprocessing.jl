@@ -1,3 +1,6 @@
+"""
+Convenient structure for postprocessing. It is less performant than having `SArray`s but is easier to manipulate.
+"""
 struct SpacecraftTrajectory
     position::Array{Float64, 2}
     attitude::Array{Float64, 2}
@@ -25,6 +28,9 @@ function Base.write(model::Spacecraft, traj::SpacecraftTrajectory, filename)
     end
 end
 
+"""
+Print some information about the solved problem.
+"""
 function postprocess(solver, x, u)
     println("Cost: ", cost(solver))
     println("Constraint violation: ", max_violation(solver))

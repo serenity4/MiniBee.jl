@@ -1,5 +1,5 @@
-using Plots
 using MiniBee
+using Plots
 using TrajectoryOptimization
 using StaticArrays
 using Sockets
@@ -15,7 +15,7 @@ waypoints = Waypoint.([
     SA[75, 0., 80],
 ], [33, 66])   # in knot points
 dt = repeat([tf/(N-1)], N-1)
-u0 = [copy(SA[1000.0, 0, 1., 0.]) for k = 1:N-1]
+u0 = [copy(SA[1000.0, 0, 1., 0.]) for _ ∈ 1:N-1]
 
 opts = SolverOptions(
     penalty_scaling=5.,
@@ -23,10 +23,6 @@ opts = SolverOptions(
     constraint_tolerance=1e-5,
     # penalty_max=
 )
-
-# lgl_nodes = remap.(gausslobatto(N)[1], Ref([-1, 1]), Ref([0, tf]))
-# dt = lgl_nodes[2:end] - lgl_nodes[1:end-1]
-
 
 traj = main(model, opts, N, tf, dt, xf_pos, u0)
 
